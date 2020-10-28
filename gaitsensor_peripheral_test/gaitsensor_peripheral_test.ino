@@ -19,7 +19,7 @@ BLECharacteristic *pCharacteristicRX;   // characteristic for receiving
 bool deviceConnected = false;           // Device connections
 
 // Define Bluetooth Serial variables.
-#define SERIALBT_NAME "Gaitsensor_BT_Serial"
+#define SERIALBT_NAME "Gaitsensor_BT_Serial(T)"
 BluetoothSerial SerialBT;
 
 // for Terminal
@@ -31,6 +31,10 @@ BluetoothSerial SerialBT;
 
 // for LowPath filter.(N)
 #define FILTER 1000
+
+//移動平均用フィルター
+#define GAIT_FILTER 10
+
 //for Low path filter (Moving average filter)
 int filter[FILTER] = {0};
 
@@ -52,7 +56,7 @@ int aveMeasuretime = 0;
 
 // before state (bool : Standing phase <= true, Swing period =< false)
 bool beforestate;
-bool subbeforestate;
+
 // Walking data (stand time, swing time.)
 int standtime = 0;
 int swingtime = 0;
@@ -107,42 +111,36 @@ class funcReceiveCallback: public BLECharacteristicCallbacks{
             // for debug
             Serial.print("Send and recv time : ");
             Serial.println(measurelagtime);
-       //****************************************************************************************sub
+       //****************************************************************************************sub****************************************
         }else if(!strcmp(rxValue.c_str(), "1")){
-          if(!subbeforestate){
             otherswingtime = millis() - aftertime;
-            subtime = millis();
             subon = true;
             if(otherswingtime > 100){
-                aftertime = millis();
                 Serial.println("            other swing time : " + String(otherswingtime));
                 input_data(3,otherswingtime);
+                subtime = millis();
+                aftertime = millis();
                 if(mainon){
                     subbothfoottime = millis() - maintime;
                     Serial.println("            sub both foot on! time : " + String(subbothfoottime));
                     input_data(5,subbothfoottime);
                 }
-            }
-            subbeforestate = true;
           }
         }else if(!strcmp(rxValue.c_str(), "0")){
-          if(subbeforestate){
             otherstandtime = millis() - aftertime;
             subon = false; 
             if(otherstandtime > 100){
-                aftertime = millis();
                 Serial.println("            other stand time : " + String(otherstandtime));
                 input_data(2,otherstandtime);
+                aftertime = millis();
                 if(!mainon){
                     Serial.println("            run!");
                     input_data(0,0);
                     input_data(1,swingtime);
                 }
             }
-            subbeforestate = false;
-          }
         }
-     //****************************************************************************************sub  
+     //****************************************************************************************sub**************************************
     }
 };
 
@@ -237,7 +235,6 @@ void setup() {
 /*********************<          Main sequence        >************************/
 void loop() {
     float ave = 0.0;
-
     // do Low path filter (Moving average filter)
     for(int i = FILTER - 1; i > 0; i--) filter[i] = filter[i - 1];
     if((digitalRead(TOO_PIN) == LOW)||(digitalRead(HEEL_PIN) == LOW)) filter[0] = 1;
@@ -251,6 +248,7 @@ void loop() {
             swingtime = millis() - beforetime;
             mainon = true;
             if(swingtime > 100){
+                M5.dis.drawpix(0, 0x000070);
                 Serial.println("swingtime : " + String(swingtime));
                 input_data(1,swingtime);
                 maintime = millis();
@@ -266,16 +264,17 @@ void loop() {
                 Serial.printf("   %d,%d,%d,%d,%d,%d\n",walkingdata[0],walkingdata[1],walkingdata[2],walkingdata[3],walkingdata[4],walkingdata[5]);
                 input_data(0,0); //初期化
             }
-            beforestate = true;
         }
+        beforestate = true;
     }else{
         if(beforestate){
+            M5.dis.drawpix(0, 0x700000);
             standtime = millis() - beforetime;
             mainon = false;
             if(standtime > 100){
-                beforetime = millis();
                 Serial.println("standtime : " + String(standtime));
                 input_data(0,standtime);
+                beforetime = millis();
                 
                 if(!subon){
                     Serial.println("run!");
@@ -283,7 +282,7 @@ void loop() {
                     input_data(3,otherswingtime);
                 }
             }
-            beforestate = false;
         }
+        beforestate = false;
     }
 }

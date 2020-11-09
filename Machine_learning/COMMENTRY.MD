@@ -15,6 +15,6 @@
 * 学習の結果最も精度が良いモデルをpickleを使い「classfiler.pickle」として保存
 * 念のためxgboostのメソッドを使用した方法でも保存している
 ### 4.gait_forecast.py  
-*使用ライブラリ：csv,pandas,numpy,pickle,xgboost
+* 使用ライブラリ：csv,pandas,numpy,pickle,xgboost
 * 「classfiler.pickle」から呼び出した学習モデルを使用し、歩行データに対して予測を行う
 * 予測して得られたクラスタ番号とその状態の説明を元の歩行データに追加し、「prediction_result.csv」として保存

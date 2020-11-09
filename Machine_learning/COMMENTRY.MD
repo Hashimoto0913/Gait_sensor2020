@@ -22,6 +22,6 @@
 * 2020/11/09時点で検証に使用しているクラスタの図  
 cluster_0:Run,走っている  
 cluster_1:Tired,疲れている  
-cluster_2:Normal,平常 
+cluster_2:Normal,平常  
 cluster_3:Stop(R),停止(右足から)  
 cluster_4:Stop(L),停止(左足から)  

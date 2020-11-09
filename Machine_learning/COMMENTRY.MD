@@ -20,6 +20,7 @@
 * 予測して得られたクラスタ番号とその状態の説明を元の歩行データに追加し、「prediction_result.csv」として保存　　
 #### 「クラスタ分類図.png」  
 * 2020/11/09時点で検証に使用しているクラスタの図  
-|cluster_0|cluster_1|cluster_2|cluster_3|cluster_4| 
-|--:|--:|--:|--:|--:| 
-|Run|Tired|Normal|Stop(R)|Stop(L)| 
+|cluster_0|cluster_1|cluster_2|cluster_3|cluster_4|
+|:---:|:---:|:---:|:---:|:---:|
+|Run|Tried|Normal|Stop( R )|Stop( L )|
+|走っている|疲れている|平常|停止(右足から)|停止(左足から)|

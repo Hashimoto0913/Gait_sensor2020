@@ -8,7 +8,7 @@
 * 「walkingdata.csv」をKmeans法でクラスタリング
 * 「walkingdata.csv」にクラスタ番号を付与したものを「Train.csv」として保存
 * 各クラスタの特徴をプロットして表示し、クラスタ番号ごとに状態を定義する
-* プロットされた結果はスクリーンショットで保存することを推奨
+* プロットされた結果は「cluster_classification_diagram.png」として保存
 ### 3.xgboost_gait.py  
 * 使用ライブラリ：xgboost,pandas,pickle,scikit-learn
 * 「Train.csv」を教師データとし、学習を行う

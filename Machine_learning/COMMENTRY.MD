@@ -17,4 +17,6 @@
 ### 4.gait_forecast.py  
 * 使用ライブラリ：csv,pandas,numpy,pickle,xgboost
 * 「classfiler.pickle」から呼び出した学習モデルを使用し、歩行データに対して予測を行う
-* 予測して得られたクラスタ番号とその状態の説明を元の歩行データに追加し、「prediction_result.csv」として保存
+* 予測して得られたクラスタ番号とその状態の説明を元の歩行データに追加し、「prediction_result.csv」として保存　　
+#### 「クラスタ分類図.png」  
+2020/11/09時点で検証に使用しているクラスタの図

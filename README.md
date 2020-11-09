@@ -1,4 +1,4 @@
-# Gaitsensor
+# Gait_sensor2020
 歩容解析につかうプログラムやデータのまとめ
 
 Machine_learning…機械学習関係

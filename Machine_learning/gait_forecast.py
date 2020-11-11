@@ -1,11 +1,9 @@
 import xgboost as xgb
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 import pickle
 import csv
-
+import matplotlib.pyplot as plt
 #対象のデータ
 testdata = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\walkingdata.csv'
 
@@ -21,7 +19,7 @@ bst = pickle.load(open('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_lea
 
 dtest = xgb.DMatrix(data)
 pred = ypred = bst.predict(dtest, ntree_limit=bst.best_ntree_limit)
-l_pred = pred.tolist()
+
 #クラスタ番号を追加したものを書き出し
 df[header] = pred
 #クラスタ番号から歩行の状態を書き出し
@@ -34,6 +32,30 @@ df.result = df.result.replace(4, "Stop(L)")
 
 #結果を出力
 df.to_csv('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\prediction_result.csv')
+
+#折れ線グラフで歩行状態の遷移を確認
+df['score'] = df['result']
+df.score = df.score.replace("Run", 4.5)
+df.score = df.score.replace("Tired",0.8)
+df.score = df.score.replace("Normal",1.25)
+df.score = df.score.replace("Stop(R)",0)
+df.score = df.score.replace("Stop(L)",0)
+
+#n歩ごとの平均
+steps= 15
+fix = 0 
+ave_move = []
+list_score = df.score.tolist()
+#割り切れない場合は割り切れる歩数までを計算する
+if len(list_score)%steps != 0: 
+    fix = len(list_score) % steps
+for i in range(0,len(list_score)-fix,steps):
+    sm = 0
+    for j in range(i,i+steps):
+        sm = sm + list_score[j]
+    ave_move.append(sm/steps)
+plt.plot(ave_move)
+plt.show()
 
 '''
 #精度の計算 Train.csvの元のデータからprediction_result.csvを作成した場合のみ可能

@@ -54,8 +54,12 @@ for i in range(0,len(list_score)-fix,steps):
     for j in range(i,i+steps):
         sm = sm + list_score[j]
     ave_move.append(sm/steps)
+
+plt.figure(figsize=(14, 7))
 plt.plot(ave_move)
+plt.savefig('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\walking_speed.png')
 plt.show()
+plt.close('all')
 
 '''
 #精度の計算 Train.csvの元のデータからprediction_result.csvを作成した場合のみ可能

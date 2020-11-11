@@ -39,7 +39,7 @@ df.to_csv('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train.
 fig, ax = plt.subplots(figsize=(12, 10))
 my_plot = clusterinfo.T.plot(kind='bar', stacked=True, title="Mean Value of 4 Clusters",ax=ax)
 my_plot.set_xticklabels(my_plot.xaxis.get_majorticklabels(), rotation=0)
-plt.show()
 #図を保存
 plt.savefig('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\cluster_classification_diagram.png')
+plt.show()
 plt.close('all')

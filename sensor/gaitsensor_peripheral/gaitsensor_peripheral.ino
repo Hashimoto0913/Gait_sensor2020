@@ -192,7 +192,7 @@ void setup() {
     // Start a Bluetooth Serial.
     SerialBT.begin(SERIALBT_NAME);
     
-    SerialBT.println("Waiting to connect...");
+    Serial.println("Waiting to connect...");
     // Wait for device to connect(Blinking LED on AtomLite)
     while(!deviceConnected){M5.dis.drawpix(0, 0x0000f0);delay(1000);M5.dis.drawpix(0, 0x000000);delay(200);}
     // Now that the connection is complete, turn on the white LED and start the measurement.
@@ -201,10 +201,10 @@ void setup() {
     delay(1000);
 
     // Start measuring lag
-    SerialBT.println("Start measuring lag!");
+    Serial.println("Start measuring lag!");
     for(int i = 0;i < SEND_AND_RECV_COUNT; i++){
         // send count data.Give the first time of lag measurement. for debug
-        SerialBT.println("send data :" + String(i));
+        Serial.println("send data :" + String(i));
         // set senddata. this is test send count.
         pCharacteristicTX->setValue(i);
         pCharacteristicTX->notify();
@@ -212,7 +212,7 @@ void setup() {
         beforetime = millis();
         delay(500);
     }
-    SerialBT.println("The lag measurement is complete.");
+    Serial.println("The lag measurement is complete.");
     // Calculation
     aveMeasuretime = sumMeasuretime / SEND_AND_RECV_COUNT;
     // for debug

@@ -75,7 +75,7 @@ int subbothfoottime = 0;
 int walkingdata[DATANUM] = {0,0,0,0,0,0};
 
 void input_data(int x, int n){
-    if( n == 0 ){for(int i=0;i<=DATANUM;i++){walkingdata[i] = 0;}}
+    if( n == 0 ){for(int i=0;i<=5;i++){walkingdata[i] = 0;}}
     else{walkingdata[x] = n;}
 }
 
@@ -135,6 +135,7 @@ class funcReceiveCallback: public BLECharacteristicCallbacks{
                 aftertime = millis();
                 if(!mainon){
                     Serial.println("            run!");
+                    subtime = millis();
                     input_data(0,0);
                     input_data(1,swingtime);
                 }
@@ -278,6 +279,7 @@ void loop() {
                 
                 if(!subon){
                     Serial.println("run!");
+                    maintime = millis();
                     input_data(0,0);
                     input_data(3,otherswingtime);
                 }

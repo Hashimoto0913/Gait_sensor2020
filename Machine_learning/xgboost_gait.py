@@ -5,10 +5,12 @@ import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-num_of_cluster = 4
+num_of_cluster = 5
+train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train.csv'
+classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier(hashimoto).pickle'
 
 # pandasのDataFrameを作成
-df = pd.read_csv('D:\ドキュメント\KIT\専門ゼミ\python_code\Train.csv')
+df = pd.read_csv(train_data)
 data = pd.DataFrame(df, columns=['bothfoot_L','swing_L','bothfoot_R','swing_R','stand_L','stand_R'])
 target = pd.DataFrame(df, columns=['cluster_id'])
 
@@ -38,10 +40,12 @@ print('Best Score:{0:.4f}, Iteratin:{1:d}, Ntree_Limit:{2:d}'.format(bst.best_sc
 #モデルの保存
 learningmodel = XGBClassifier()
 
-with open('classifier.pickle', mode='wb') as f:
+#pickle
+with open(classifier, mode='wb') as f:
     pickle.dump(bst, f)
 
-bst.save_model('./classifier.model')
+#xgb
+#bst.save_model('./classifier.model')
 
 # 検証結果のうち最も結果が良かったモデルで予測
 dtest = xgb.DMatrix(test_x)

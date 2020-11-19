@@ -4,8 +4,11 @@ import pandas as pd
 import pickle
 import csv
 import matplotlib.pyplot as plt
+
 #対象のデータ
-testdata = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\walkingdata.csv'
+testdata = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata.csv'
+classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier(hashimoto).pickle'
+result = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\prediction_result.csv'
 
 header = "cluster_id"
 headers = header.split(',')
@@ -15,7 +18,7 @@ df = pd.read_csv(testdata)
 data = pd.DataFrame(df, columns=['bothfoot_L','swing_L','bothfoot_R','swing_R','stand_L','stand_R'])
 
 #学習済みモデルを読み込み、予測を行う(長期予測)
-bst = pickle.load(open('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier.pickle', 'rb'))
+bst = pickle.load(open(classifier, 'rb'))
 
 dtest = xgb.DMatrix(data)
 pred = ypred = bst.predict(dtest, ntree_limit=bst.best_ntree_limit)
@@ -31,10 +34,12 @@ df.result = df.result.replace(3, "Stop(R)")
 df.result = df.result.replace(4, "Stop(L)")
 
 #結果を出力
-df.to_csv('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\prediction_result.csv')
+df.to_csv(result)
 
-#折れ線グラフで歩行状態の遷移を確認
+'''
+###折れ線グラフで歩行状態の遷移を確認
 df['score'] = df['result']
+#状態から大体の速度を求める
 df.score = df.score.replace("Run", 4.5)
 df.score = df.score.replace("Tired",0.8)
 df.score = df.score.replace("Normal",1.25)
@@ -54,13 +59,13 @@ for i in range(0,len(list_score)-fix,steps):
     for j in range(i,i+steps):
         sm = sm + list_score[j]
     ave_move.append(sm/steps)
-
+print(ave_move)
 plt.figure(figsize=(14, 7))
 plt.plot(ave_move)
 plt.savefig('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\walking_speed.png')
 plt.show()
 plt.close('all')
-
+'''
 '''
 #精度の計算 Train.csvの元のデータからprediction_result.csvを作成した場合のみ可能
 #新規のデータは正解ラベルが存在しないため精度がわからない

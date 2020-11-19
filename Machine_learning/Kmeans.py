@@ -4,13 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-num_of_cluster = 5 
+num_of_cluster = 5
 
-#test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\test.csv'
+test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata(hashimoto).csv'
+train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train(hashimoto).csv'
+pltfig = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\cluster_classification_diagram(hashimoto).png'
 
-df = pd.read_csv('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\walkingdata.csv')
-
-#df = pd.read_csv(test_data)
+df = pd.read_csv(test_data)
 
 array = np.array([df['bothfoot_L'].tolist(),
                   df['swing_L'].tolist(),
@@ -33,13 +33,13 @@ clusterinfo = clusterinfo.drop('cluster_id')
 print(clusterinfo.T)
 
 #train.csvの作成
-df.to_csv('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train.csv')
+df.to_csv(train_data)
 
 #図として出力
 fig, ax = plt.subplots(figsize=(12, 10))
 my_plot = clusterinfo.T.plot(kind='bar', stacked=True, title="Mean Value of 4 Clusters",ax=ax)
 my_plot.set_xticklabels(my_plot.xaxis.get_majorticklabels(), rotation=0)
 #図を保存
-plt.savefig('C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\cluster_classification_diagram.png')
+plt.savefig(pltfig)
 plt.show()
 plt.close('all')

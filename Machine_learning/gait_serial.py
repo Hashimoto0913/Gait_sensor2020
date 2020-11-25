@@ -1,4 +1,3 @@
-#タイムスタンプとバイト数　一歩分の周期　周波数
 import serial
 import csv
 
@@ -6,16 +5,12 @@ import csv
 test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata(hashimoto).csv'
 
 ser = serial.Serial('COM5', baudrate=115200, parity=serial.PARITY_NONE)
-
-header = "bothfoot_L,swing_L,bothfoot_R,swing_R,stand_L,stand_R"
-headers = header.split(',')
 line = ser.readline()
-
 total_byte = 0
-
-
 '''
 #初期化
+header = "bothfoot_L,swing_L,bothfoot_R,swing_R,stand_L,stand_R"
+headers = header.split(',')
 with open(test_data, 'w',newline="") as f:
     writer = csv.writer(f)
     writer.writerow(headers)

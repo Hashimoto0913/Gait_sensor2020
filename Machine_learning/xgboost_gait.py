@@ -5,8 +5,11 @@ import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+# クラスタ数
 num_of_cluster = 5
-train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train.csv'
+# 教師データ
+train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train(hashimoto).csv'
+# モデルの保存先
 classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier(hashimoto).pickle'
 
 # pandasのDataFrameを作成
@@ -16,8 +19,6 @@ target = pd.DataFrame(df, columns=['cluster_id'])
 
 # 訓練データとテストデータの取得
 train_x, test_x, train_y, test_y = train_test_split(data, target, test_size=0.2, shuffle=True)
-
-#### 学習中のバリデーション(検定)とアーリーストッピング(学習の打ち切り)
 # 学習用データの一部を検証用データとして使用
 train_x, valid_x, train_y, valid_y = train_test_split(train_x, train_y, test_size=0.2, shuffle=True)
 
@@ -34,18 +35,16 @@ evallist = [(dvalid, 'eval'), (dtrain, 'train')]
 num_round = 10000
 bst = xgb.train(param, dtrain, num_round, evallist, early_stopping_rounds=5) # 5回連続して評価指標が改善しなかったら学習を中断
 
-#検証結果の確認
+# 検証結果の確認
 print('Best Score:{0:.4f}, Iteratin:{1:d}, Ntree_Limit:{2:d}'.format(bst.best_score, bst.best_iteration, bst.best_ntree_limit))
 
-#モデルの保存
+### モデルの保存
 learningmodel = XGBClassifier()
-
-#pickle
+# pickle
 with open(classifier, mode='wb') as f:
     pickle.dump(bst, f)
-
-#xgb
-#bst.save_model('./classifier.model')
+# xgb
+# bst.save_model('./classifier.model')
 
 # 検証結果のうち最も結果が良かったモデルで予測
 dtest = xgb.DMatrix(test_x)

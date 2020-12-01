@@ -113,31 +113,30 @@ class funcReceiveCallback: public BLECharacteristicCallbacks{
             Serial.println(measurelagtime);
        //****************************************************************************************sub****************************************
         }else if(!strcmp(rxValue.c_str(), "1")){
-            otherswingtime = millis() - aftertime;
             subon = true;
             if(otherswingtime > 100){
-                Serial.println("            other swing time : " + String(otherswingtime));
-                input_data(3,otherswingtime);
                 subtime = millis();
-                aftertime = millis();
-                if(mainon){
-                    subbothfoottime = millis() - maintime;
-                    Serial.println("            sub both foot on! time : " + String(subbothfoottime));
-                    input_data(5,subbothfoottime);
-                }
-          }
-        }else if(!strcmp(rxValue.c_str(), "0")){
-            otherstandtime = millis() - aftertime;
-            subon = false; 
-            if(otherstandtime > 100){
-                Serial.println("            other stand time : " + String(otherstandtime));
-                input_data(2,otherstandtime);
-                aftertime = millis();
+                otherswingtime = subtime - aftertime;
                 if(!mainon){
                     Serial.println("            run!");
-                    subtime = millis();
-                    input_data(0,0);
+                    //input_data(0,0);
                     input_data(1,swingtime);
+                }
+                Serial.println("            other swing time : " + String(otherswingtime));
+                input_data(3,otherswingtime);
+          }
+        }else if(!strcmp(rxValue.c_str(), "0")){
+            subon = false; 
+            if(otherstandtime > 100){
+                aftertime = millis();
+                otherstandtime = aftertime - subtime;
+                Serial.println("            other stand time : " + String(otherstandtime));
+                input_data(2,otherstandtime);
+
+                if(mainon){
+                    subbothfoottime = aftertime - maintime;
+                    Serial.println("            sub both foot on! time : " + String(subbothfoottime));
+                    input_data(5,subbothfoottime);
                 }
             }
         }
@@ -246,21 +245,20 @@ void loop() {
 
     if(ave >= 0.7){       //足がついている
         if(!beforestate){
-            swingtime = millis() - beforetime;
             mainon = true;
             if(swingtime > 100){
                 M5.dis.drawpix(0, 0x000070);
+                maintime = millis();
+                swingtime = maintime - beforetime;
+                if(!subon){
+                    Serial.println("run!");
+                    //input_data(0,0);
+                    input_data(3,otherswingtime);
+                }
+                
                 Serial.println("swingtime : " + String(swingtime));
                 input_data(1,swingtime);
-                maintime = millis();
-                beforetime = millis();
-                              
-                if(subon){
-                    bothfoottime = millis() - subtime;
-                    Serial.println("main both foot on! time : " + String(bothfoottime));
-                    input_data(4,bothfoottime);
-                }
-
+                
                 SerialBT.printf("%d,%d,%d,%d,%d,%d\n",walkingdata[0],walkingdata[1],walkingdata[2],walkingdata[3],walkingdata[4],walkingdata[5]);
                 Serial.printf("   %d,%d,%d,%d,%d,%d\n",walkingdata[0],walkingdata[1],walkingdata[2],walkingdata[3],walkingdata[4],walkingdata[5]);
                 input_data(0,0); //初期化
@@ -270,18 +268,18 @@ void loop() {
     }else{
         if(beforestate){
             M5.dis.drawpix(0, 0x700000);
-            standtime = millis() - beforetime;
+
             mainon = false;
             if(standtime > 100){
+                beforetime = millis();
+                standtime = beforetime - maintime;
                 Serial.println("standtime : " + String(standtime));
                 input_data(0,standtime);
-                beforetime = millis();
                 
-                if(!subon){
-                    Serial.println("run!");
-                    maintime = millis();
-                    input_data(0,0);
-                    input_data(3,otherswingtime);
+                if(subon){
+                    bothfoottime = beforetime - subtime;
+                    Serial.println("main both foot on! time : " + String(bothfoottime));
+                    input_data(4,bothfoottime);
                 }
             }
         }

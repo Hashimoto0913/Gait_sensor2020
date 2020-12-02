@@ -19,7 +19,7 @@ BLECharacteristic *pCharacteristicRX;   // characteristic for receiving
 bool deviceConnected = false;           // Device connections
 
 // Define Bluetooth Serial variables.
-#define SERIALBT_NAME "Gaitsensor_BT_Serial(T)"
+#define SERIALBT_NAME "Gaitsensor_BT_Serial(2)"
 BluetoothSerial SerialBT;
 
 // for Terminal
@@ -114,30 +114,31 @@ class funcReceiveCallback: public BLECharacteristicCallbacks{
        //****************************************************************************************sub****************************************
         }else if(!strcmp(rxValue.c_str(), "1")){
             subon = true;
+            subtime = millis();
+            otherswingtime = subtime - aftertime;
             if(otherswingtime > 100){
-                subtime = millis();
-                otherswingtime = subtime - aftertime;
                 if(!mainon){
                     Serial.println("            run!");
                     //input_data(0,0);
                     input_data(1,swingtime);
                 }
+                
                 Serial.println("            other swing time : " + String(otherswingtime));
                 input_data(3,otherswingtime);
           }
         }else if(!strcmp(rxValue.c_str(), "0")){
-            subon = false; 
+            subon = false;
+            aftertime = millis();
+            otherstandtime = aftertime - subtime;
             if(otherstandtime > 100){
-                aftertime = millis();
-                otherstandtime = aftertime - subtime;
-                Serial.println("            other stand time : " + String(otherstandtime));
-                input_data(2,otherstandtime);
-
                 if(mainon){
                     subbothfoottime = aftertime - maintime;
                     Serial.println("            sub both foot on! time : " + String(subbothfoottime));
                     input_data(5,subbothfoottime);
                 }
+                
+                Serial.println("            other stand time : " + String(otherstandtime));
+                input_data(2,otherstandtime); 
             }
         }
      //****************************************************************************************sub**************************************
@@ -245,11 +246,11 @@ void loop() {
 
     if(ave >= 0.7){       //足がついている
         if(!beforestate){
+            M5.dis.drawpix(0, 0x000070);
             mainon = true;
+            maintime = millis();
+            swingtime = maintime - beforetime;
             if(swingtime > 100){
-                M5.dis.drawpix(0, 0x000070);
-                maintime = millis();
-                swingtime = maintime - beforetime;
                 if(!subon){
                     Serial.println("run!");
                     //input_data(0,0);
@@ -268,19 +269,18 @@ void loop() {
     }else{
         if(beforestate){
             M5.dis.drawpix(0, 0x700000);
-
             mainon = false;
+            beforetime = millis();
+            standtime = beforetime - maintime;
             if(standtime > 100){
-                beforetime = millis();
-                standtime = beforetime - maintime;
-                Serial.println("standtime : " + String(standtime));
-                input_data(0,standtime);
-                
                 if(subon){
                     bothfoottime = beforetime - subtime;
                     Serial.println("main both foot on! time : " + String(bothfoottime));
                     input_data(4,bothfoottime);
                 }
+                
+                Serial.println("standtime : " + String(standtime));
+                input_data(0,standtime);
             }
         }
         beforestate = false;

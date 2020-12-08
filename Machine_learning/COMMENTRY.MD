@@ -24,10 +24,3 @@
 * 「classfiler.pickle」から呼び出した学習モデルを使用し、送られてきた歩行データに対して予測を行う
 * PC側のターミナルに予測して得られたクラスタ番号を表示する
 * 送られてきたデータは「walkingdata.csv」に保存される
-#### 「クラスタ分類図.png」  
-* 2020/11/09時点で検証に使用しているクラスタの図  
-cluster_0:Run,走っている  
-cluster_1:Tired,疲れている  
-cluster_2:Normal,平常  
-cluster_3:Stop(R),停止(右足から)  
-cluster_4:Stop(L),停止(左足から)  

@@ -5,11 +5,11 @@ import pickle
 import csv
 
 # 予測対象の歩行データ
-testdata = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata(hashimoto).csv'
+testdata = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata.csv'
 # 使用する学習モデル
-classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier(hashimoto).pickle'
+classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier.pickle'
 # 結果の出力先
-result = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\prediction_result(hashimoto).csv'
+result = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\prediction_result.csv'
 
 # pandasのDataFrameを作成
 df = pd.read_csv(testdata)
@@ -24,11 +24,11 @@ pred = ypred = bst.predict(dtest, ntree_limit=bst.best_ntree_limit)
 df['cluster_id'] = pred
 # クラスタ番号から歩行の状態を書き出し
 df['result'] = pred
-df.result = df.result.replace(3, "Run")
-df.result = df.result.replace(0, "Tired")
-df.result = df.result.replace(1, "Normal")
+df.result = df.result.replace(0, "Run")
+df.result = df.result.replace(4, "Tired")
+df.result = df.result.replace(3, "Normal")
 df.result = df.result.replace(2, "Stop")
-
+df.result = df.result.replace(1, "Stop")
 #結果を出力
 df.to_csv(result)
 

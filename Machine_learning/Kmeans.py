@@ -5,14 +5,14 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
 # クラスタ数
-num_of_cluster = 6
+num_of_cluster = 9
 
 # 元データ
-test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\small_test.csv'
+test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata.csv'
 # 教師データの保存先
-train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\small_Train.csv'
+train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train.csv'
 # クラスタごとの特徴図の保存先
-pltfig = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\cluster_classification_diagram(small).png'
+pltfig = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\cluster_classification_diagram.png'
 
 df = pd.read_csv(test_data)
 array = np.array([df['bothfoot_L'].tolist(),

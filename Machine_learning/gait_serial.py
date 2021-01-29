@@ -2,11 +2,12 @@ import serial
 import csv
 
 # 歩行データの保存先
-test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata(hashimoto).csv'
+test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata.csv'
 
-ser = serial.Serial('COM5', baudrate=115200, parity=serial.PARITY_NONE)　# COMポートはPC環境によって変化
+ser = serial.Serial('COM9', baudrate=115200, parity=serial.PARITY_NONE) # COMポートはPC環境によって変化
 line = ser.readline()
 total_byte = 0
+
 '''
 # 初期化　ヘッダーを追加する
 header = "bothfoot_L,swing_L,bothfoot_R,swing_R,stand_L,stand_R"
@@ -15,6 +16,7 @@ with open(test_data, 'w',newline="") as f:
     writer = csv.writer(f)
     writer.writerow(headers)
 '''
+
 try:
     # 追記
     while True:

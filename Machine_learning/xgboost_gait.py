@@ -6,11 +6,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # クラスタ数
-num_of_cluster = 5
+num_of_cluster = 9
 # 教師データ
-train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train(hashimoto).csv'
+train_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\Train.csv'
 # モデルの保存先
-classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier(hashimoto).pickle'
+classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier.pickle'
 
 # pandasのDataFrameを作成
 df = pd.read_csv(train_data)
@@ -23,7 +23,7 @@ train_x, test_x, train_y, test_y = train_test_split(data, target, test_size=0.2,
 train_x, valid_x, train_y, valid_y = train_test_split(train_x, train_y, test_size=0.2, shuffle=True)
 
 # xgboost用の型に変換する
-dtrain = xgb.DMatrix(train_x, label=train_y)  
+dtrain = xgb.DMatrix(train_x, label=train_y)
 dvalid = xgb.DMatrix(valid_x, label=valid_y)
 
 # パラメータの設定　{'max_depth':"木の最大深度",'eta':"学習率",'objective':"学習目的",'num_class':"クラス数"}

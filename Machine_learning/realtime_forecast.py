@@ -6,11 +6,11 @@ import pandas as pd
 import pickle
 
 # # 歩行データの保存先
-test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata(hashimoto).csv'
+test_data = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\walkingdata\\walkingdata.csv'
 # 使用する学習モデル
-classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier(hashimoto).pickle'
+classifier = 'C:\\Users\\user\\Documents\\Gaitsensor-main\\Machine_learning\\classifier.pickle'
 bst = pickle.load(open(classifier, 'rb'))
-ser = serial.Serial('COM5', baudrate=115200, parity=serial.PARITY_NONE)
+ser = serial.Serial('COM9', baudrate=115200, parity=serial.PARITY_NONE)
 line = ser.readline()
 total_byte = 0
 try:
@@ -18,7 +18,7 @@ try:
     while True:
         line = ser.readline()
         total_byte = total_byte + len(line.decode('utf-8'))
-        print("                                 byte:",len(line.decode('utf-8'))," total_byte:", total_byte)
+        #print("                                 byte:",len(line.decode('utf-8'))," total_byte:", total_byte)
         line_str = (line.decode('utf-8')).replace('\n', '') # byteをstrに変換後、改行コードを削除
         lines = line_str.split(',')
         print(lines)
@@ -33,17 +33,17 @@ try:
         # 最終行を対象に予測
         dtest = xgb.DMatrix(data.tail(1))
         pred = ypred = bst.predict(dtest, ntree_limit=bst.best_ntree_limit)
-        print(pred[0]) # クラスタ番号
+        #print(pred[0]) # クラスタ番号
         cpred = int(pred[0])
         # 番号ごとの定義は毎回変える必要がある
-        if cpred == 0:
-            print("Tried")
-        elif cpred == 1:
+        if cpred == 4:
             print("Normal")
-        elif cpred == 2:
-            print("Stop")
+        elif cpred == 0:
+            print("Tired")
+        elif cpred == 8:
+            print("RUN")
         else:
-            print("Run")
+            print("Stop")
 
 except KeyboardInterrupt:
     # 確認用
